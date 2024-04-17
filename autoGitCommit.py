@@ -20,6 +20,7 @@ def generate_commit_message(prompt):
         ]
     }
 
+
     headers = {
         'Content-Type': 'application/json'
     }
@@ -39,9 +40,6 @@ def generate_commit_prompt():
     # Use git diff to get the changes in the staged files
     diff_output = subprocess.check_output(["git", "diff", "--cached"]).decode("utf-8")
 
-    # Extract relevant information from the diff
-    # Here, we split the diff output by file, and then extract the filename and the diff content
-    # We include the filename and the diff content in the prompt
     changed_files = []
     start = -1
     for idx, line in enumerate(diff_output.splitlines()):
