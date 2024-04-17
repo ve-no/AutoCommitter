@@ -65,4 +65,4 @@ prompt = generate_commit_message(generate_commit_prompt())
 if prompt:
     print(prompt)
 else:
-    print("Story generation failed.")
+    print("commit generation failed.")
