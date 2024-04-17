@@ -61,7 +61,6 @@ def generate_commit_prompt():
 
     return prompt
 
-# prompt = "Write a story about a magic backpack"
 prompt = generate_commit_message(generate_commit_prompt())
 
 if prompt:
