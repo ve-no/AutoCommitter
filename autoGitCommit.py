@@ -52,16 +52,19 @@ def generate_commit_prompt():
         changed_files.append((filename, diff_output[start:]))
 
     # Generate the commit message prompt based on the changes
-    prompt = "Generate a commit message for the following changes:\n\n"
+    prompt = "Write a concise commit message that summarizes the following:\n\n"
     for filename, diff_content in changed_files:
         prompt += f"- Changes in file: {filename}\n\n{diff_content}\n"
+    prompt += "\n**Tips:**\n"
+    prompt += "- Use imperative present tense (e.g., 'Fix bug', not 'Fixed bug')\n"
+    prompt += "- Aim for a single line, with a maximum of 50 characters\n"
 
     return prompt
 
 prompt = generate_commit_message(generate_commit_prompt())
 
 if prompt:
-    print(prompt.split('\n')[0])
+    print(prompt.split("\n")[0])
 else:
     print("commit generation failed.")
 
