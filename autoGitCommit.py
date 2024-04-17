@@ -3,7 +3,7 @@ import json
 import subprocess
 import os
 
-# Replace with your actual API Key
+# in bash,run `export API_KEY=your_api_key`
 API_KEY = os.environ.get('API_KEY')
 MODEL_NAME = "gemini-pro"
 
@@ -20,7 +20,6 @@ def generate_commit_message(prompt):
         ]
     }
 
-
     headers = {
         'Content-Type': 'application/json'
     }
@@ -33,8 +32,6 @@ def generate_commit_message(prompt):
     else:
         print(f"Error: {response.status_code}")
         return None
-
-
 
 def generate_commit_prompt():
     # Use git diff to get the changes in the staged files
@@ -61,15 +58,36 @@ def generate_commit_prompt():
 
     return prompt
 
-prompt = generate_commit_message(generate_commit_prompt())
+# prompt = generate_commit_message(generate_commit_prompt())
 
-if prompt:
-    print(prompt.split("\n")[0])
-else:
-    print("commit generation failed.")
+# if prompt:
+#     print(prompt.split("\n")[0])
+# else:
+#     print("commit generation failed.")
 
 
+def commit_and_push(commit_message):
+    # Stage the changes
+    # subprocess.call(["git", "add", "."])
 
+    # Commit with the generated message
+    subprocess.call(["git", "commit", "-m", commit_message])
+
+    # Push to the current branch (assumes a remote is set up)
+    subprocess.call(["git", "push"])
+
+if __name__ == "__main__":  # Good practice to guard code in a main block
+    prompt = generate_commit_message(generate_commit_prompt())
+
+    if prompt:
+        commit_message = prompt.split("\n")[0]  # Use the generated message
+        print(f"Generated commit message: {commit_message}")
+
+        # Perform the commit and push
+        commit_and_push(commit_message)
+        print("Changes committed and pushed to remote.")
+    else:
+        print("Commit generation failed.")
 
 
 
