@@ -61,6 +61,12 @@ def generate_commit_prompt():
 prompt = generate_commit_message(generate_commit_prompt())
 
 if prompt:
-    print(prompt)
+    print(prompt.split('\n')[0])
 else:
     print("commit generation failed.")
+
+
+
+
+
+
