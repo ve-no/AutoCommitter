@@ -58,18 +58,7 @@ def generate_commit_prompt():
 
     return prompt
 
-# prompt = generate_commit_message(generate_commit_prompt())
-
-# if prompt:
-#     print(prompt.split("\n")[0])
-# else:
-#     print("commit generation failed.")
-
-
 def commit_and_push(commit_message):
-    # Stage the changes
-    # subprocess.call(["git", "add", "."])
-
     # Commit with the generated message
     subprocess.call(["git", "commit", "-m", commit_message])
 
@@ -77,17 +66,34 @@ def commit_and_push(commit_message):
     subprocess.call(["git", "push"])
 
 if __name__ == "__main__":  # Good practice to guard code in a main block
-    prompt = generate_commit_message(generate_commit_prompt())
+    # prompt = generate_commit_message(generate_commit_prompt())
 
-    if prompt:
-        commit_message = prompt.split("\n")[0]  # Use the generated message
-        print(f"Generated commit message: {commit_message}")
+    # if prompt:
+    #     commit_message = prompt.split("\n")[0]  # Use the generated message
+    #     print(f"Generated commit message: {commit_message}")
 
-        # Perform the commit and push
-        commit_and_push(commit_message)
-        print("Changes committed and pushed to remote.")
-    else:
-        print("Commit generation failed.")
+    #     # Perform the commit and push
+    #     commit_and_push(commit_message)
+    #     print("Changes committed and pushed to remote.")
+    # else:
+    #     print("Commit generation failed.")
 
+    while True:  # Start the confirmation loop
+        prompt = generate_commit_message(generate_commit_prompt())
+
+        if prompt:
+            commit_message = prompt.split("\n")[0]
+            print(f"Generated commit message: {commit_message}")
+
+            confirmation = input("Is this commit message okay? (y/n): ")
+            if confirmation.lower() in ['y', '']:
+                commit_and_push(commit_message)
+                print("Changes committed and pushed to remote.")
+                break  # Exit the loop if the message is confirmed
+            else:
+                print("Regenerating commit message...")
+        else:
+            print("Commit generation failed.")
+            break  # Exit loop on failure
 
 
