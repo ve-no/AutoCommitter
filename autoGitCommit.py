@@ -77,11 +77,11 @@ if __name__ == "__main__":
             if confirmation.lower() in ['y', '']:
                 commit_and_push(commit_message)
                 print("Changes committed and pushed to remote.")
-                break  # Exit the loop if the message is confirmed
+                break
             else:
                 print("Regenerating commit message...")
         else:
             print("Commit generation failed.")
-            break  # Exit loop on failure
+            break
 
 
