@@ -36,9 +36,4 @@ This Python script leverages a powerful language model to automatically generate
 git add .  # Stage the changes
 python commit_generator.py
 
-# Output
-# Generated commit message: "Fix issue with user authentication"
-# [main 3a8f4b7] Fix issue with user authentication
-#  1 file changed, 2 insertions(+), 1 deletion(-)
-# Counting objects: 3, done.
-# Delta compression using up to 8 threads.
+
