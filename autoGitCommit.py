@@ -46,6 +46,15 @@ def generate_commit_message(prompt):
         return None
 
 def generate_commit_prompt():
+    """
+    Generates a commit message prompt based on the changes in the staged files.
+
+    Returns:
+        str: The commit message prompt.
+
+    Raises:
+        subprocess.CalledProcessError: If the 'git diff' command fails.
+    """
     # Use git diff to get the changes in the staged files
     diff_output = subprocess.check_output(["git", "diff", "--cached"]).decode("utf-8")
 
