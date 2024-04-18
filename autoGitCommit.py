@@ -65,20 +65,8 @@ def commit_and_push(commit_message):
     # Push to the current branch (assumes a remote is set up)
     subprocess.call(["git", "push"])
 
-if __name__ == "__main__":  # Good practice to guard code in a main block
-    # prompt = generate_commit_message(generate_commit_prompt())
-
-    # if prompt:
-    #     commit_message = prompt.split("\n")[0]  # Use the generated message
-    #     print(f"Generated commit message: {commit_message}")
-
-    #     # Perform the commit and push
-    #     commit_and_push(commit_message)
-    #     print("Changes committed and pushed to remote.")
-    # else:
-    #     print("Commit generation failed.")
-
-    while True:  # Start the confirmation loop
+if __name__ == "__main__":
+    while True:
         prompt = generate_commit_message(generate_commit_prompt())
 
         if prompt:
