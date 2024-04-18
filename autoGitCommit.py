@@ -7,7 +7,19 @@ import os
 API_KEY = os.environ.get('API_KEY')
 MODEL_NAME = "gemini-pro"
 
+import requests
+import json
+
 def generate_commit_message(prompt):
+    """
+    Generates a commit message based on the given prompt.
+    Args:
+        prompt (str): The prompt to generate the commit message from.
+    Returns:
+        str: The generated commit message.
+    Raises:
+        None
+    """
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL_NAME}:generateContent?key={API_KEY}"
 
     payload = {
