@@ -78,7 +78,7 @@ def generate_commit_prompt():
     prompt += "- Aim for a single line, with a maximum of 50 characters\n"
 
     return prompt
-# Refactor: Increase commit message prompt line length
+
 if __name__ == "__main__":
     while True:
         prompt = generate_commit_message(generate_commit_prompt())
