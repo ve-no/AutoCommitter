@@ -58,13 +58,6 @@ def generate_commit_prompt():
 
     return prompt
 
-def commit_and_push(commit_message):
-    # Commit with the generated message
-    subprocess.call(["git", "commit", "-m", commit_message])
-
-    # Push to the current branch (assumes a remote is set up)
-    subprocess.call(["git", "push"])
-
 if __name__ == "__main__":
     while True:
         prompt = generate_commit_message(generate_commit_prompt())
@@ -75,7 +68,8 @@ if __name__ == "__main__":
 
             confirmation = input("Is this commit message okay? (y/n): ")
             if confirmation.lower() in ['y', '']:
-                commit_and_push(commit_message)
+                subprocess.call(["git", "commit", "-m", commit_message])
+                subprocess.call(["git", "push"])
                 print("Changes committed and pushed to remote.")
                 break
             else:
