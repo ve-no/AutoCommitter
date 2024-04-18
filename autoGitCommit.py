@@ -84,12 +84,11 @@ if __name__ == "__main__":
         prompt = generate_commit_message(generate_commit_prompt())
 
         if prompt:
-            commit_message = prompt
-            print(f"Generated commit message: {commit_message}")
+            print(f"Generated commit message: {prompt}")
 
             confirmation = input("Is this commit message okay? (y/n): ")
             if confirmation.lower() in ['y', '']:
-                subprocess.call(["git", "commit", "-m", commit_message])
+                subprocess.call(["git", "commit", "-m", prompt])
                 subprocess.call(["git", "push"])
                 print("Changes committed and pushed to remote.")
                 break
