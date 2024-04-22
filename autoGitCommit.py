@@ -57,6 +57,9 @@ def generate_commit_prompt():
     """
     # Use git diff to get the changes in the staged files
     diff_output = subprocess.check_output(["git", "diff", "--cached"]).decode("utf-8")
+    if not diff_output:
+        print("No changes in the staged files.")
+        return None
 
     changed_files = []
     start = -1
@@ -81,6 +84,8 @@ def generate_commit_prompt():
 
 if __name__ == "__main__":
     while True:
+        if generate_commit_prompt() is None:
+            break
         prompt = generate_commit_message(generate_commit_prompt())
 
         if prompt:
