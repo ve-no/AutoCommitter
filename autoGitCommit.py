@@ -91,7 +91,6 @@ if __name__ == "__main__":
                 subprocess.call(["git", "commit", "-m", prompt])
                 subprocess.call(["git", "push"])
                 print("Changes committed and pushed to remote.")
-                break
             else:
                 print("Regenerating commit message...")
         else:
