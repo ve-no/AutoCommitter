@@ -55,7 +55,6 @@ def generate_commit_prompt():
     Raises:
         subprocess.CalledProcessError: If the 'git diff' command fails.
     """
-    # Use git diff to get the changes in the staged files
     diff_output = subprocess.check_output(["git", "diff", "--cached"]).decode("utf-8")
     if not diff_output:
         print("No changes in the staged files.")
