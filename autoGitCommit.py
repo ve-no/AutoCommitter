@@ -72,7 +72,6 @@ def generate_commit_prompt():
     if start != -1:
         changed_files.append((filename, diff_output[start:]))
 
-    # Generate the commit message prompt based on the changes
     prompt = "Write a concise commit message that summarizes the following:\n\n"
     for filename, diff_content in changed_files:
         prompt += f"- Changes in file: {filename}\n\n{diff_content}\n"
