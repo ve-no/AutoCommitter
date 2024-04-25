@@ -3,7 +3,6 @@ import json
 import subprocess
 import os
 
-# in bash,run `export API_KEY=your_api_key`
 API_KEY = os.environ.get('API_KEY')
 MODEL_NAME = "gemini-pro"
 
