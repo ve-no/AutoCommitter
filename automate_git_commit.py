@@ -104,10 +104,7 @@ def automate_git_commit():
         return
 
     for line in modified_files:
-        status = line[0]
         filename = line[3:]  # Extract filename
-        # print(filename)
-        print(status)
         if filename:
             subprocess.call(["git", "add", filename])
 
