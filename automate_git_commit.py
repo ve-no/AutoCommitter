@@ -3,6 +3,7 @@ import json
 import subprocess
 import time
 import os
+import autoGitCommit
 
 API_KEY = os.environ.get('API_KEY')
 MODEL_NAME = "gemini-pro"
@@ -79,7 +80,7 @@ def handle_file_change(filename, status):
         commit_message = f"Delete file {filename}"
     else:  # 'M' or 'A'
         subprocess.call(["git", "add", filename])
-        commit_prompt = generate_commit_prompt(filename)
+        commit_prompt = autoGitCommit.generate_commit_prompt(filename)
         if commit_prompt:
             commit_message = generate_commit_message(commit_prompt)
             if not commit_message:
