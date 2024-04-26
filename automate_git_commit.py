@@ -72,10 +72,26 @@ def generate_commit_prompt(filename):
     return prompt
 
 
+def handle_file_change(filename, status):
+    """Handles actions for a changed file based on its status code."""
+    if status == 'D':
+        subprocess.call(["git", "rm", filename])
+        commit_message = f"Delete file {filename}"
+    else:  # 'M' or 'A'
+        subprocess.call(["git", "add", filename])
+        commit_prompt = generate_commit_prompt(filename)
+        if commit_prompt:
+            commit_message = generate_commit_message(commit_prompt)
+            if not commit_message:
+                print(f"Failed to generate commit message for {filename}.")
+                return
+
+    subprocess.call(["git", "commit", "-m", commit_message])
+    subprocess.call(["git", "push"])
+    print(f"Changes in {filename} committed and pushed to remote.")
+
 def automate_git_commit():
-    """
-    Automates the Git commit process with granular file-by-file tracking.
-    """
+    """Automates the Git commit process with granular file-by-file tracking."""
     try:
         modified_files = subprocess.check_output(
             ["git", "status", "--porcelain"]
@@ -85,30 +101,12 @@ def automate_git_commit():
         return
 
     for line in modified_files:
-        status = line[0]  # Extract status (first character)
+        status = line[0]
         filename = line[3:]
-        # if filename:  # Modified, Added, or Deleted files
-        if os.path.exists(filename):  # File still exists
-            if status != "D":  # Modified or Added
-                subprocess.call(["git", "add", filename])
-                commit_prompt = generate_commit_prompt(filename)
-                if commit_prompt:
-                    commit_message = generate_commit_message(commit_prompt)
-                    if commit_message:
-                        subprocess.call(["git", "commit", "-m", commit_message])
-                        subprocess.call(["git", "push"])
-                        print(f"Changes in {filename} committed and pushed to remote.")
-                    else:
-                        print(f"Failed to generate commit message for {filename}.")
-                else:
-                    print(f"No diff or prompt available for {filename}, skipping commit.")
-
-        else:  # File has been deleted
-            subprocess.call(["git", "rm", filename])
-            commit_message = f"Delete file {filename}"  # Simple default message
-            subprocess.call(["git", "commit", "-m", commit_message])
-            subprocess.call(["git", "push"])
-            print(f"Deleted file {filename} committed and pushed to remote.")
+        if os.path.exists(filename):
+            handle_file_change(filename, status)
+        else:
+            print(f"File {filename} has been deleted but not staged. Skipping.")
 
 
 if __name__ == "__main__":
