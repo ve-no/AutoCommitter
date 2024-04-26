@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+
 PYTHON_SCRIPT_NAME="autoGitCommit.py"
 ALIAS_NAME="commit"
 SCRIPT_DOWNLOAD_PATH="$HOME/.local/bin"
