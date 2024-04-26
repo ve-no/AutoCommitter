@@ -1,8 +1,8 @@
 import requests
 import json
 import subprocess
+import time
 import os
-import time  # Import the 'time' module for scheduling
 
 API_KEY = os.environ.get('API_KEY')
 MODEL_NAME = "gemini-pro"
@@ -22,7 +22,6 @@ def generate_commit_message(prompt):
         None
     """
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL_NAME}:generateContent?key={API_KEY}"
-
     payload = {
         "contents": [
             {
@@ -32,11 +31,9 @@ def generate_commit_message(prompt):
             }
         ]
     }
-
     headers = {
         'Content-Type': 'application/json'
     }
-
     response = requests.post(url, headers=headers, data=json.dumps(payload))
 
     if response.status_code == 200:
@@ -50,38 +47,28 @@ def generate_commit_prompt(filename):
     """
     Generates a commit message prompt based on the changes in the staged files.
 
+    Args:
+        filename (str): Name of the file to create the prompt for.
+
     Returns:
         str: The commit message prompt.
 
     Raises:
         subprocess.CalledProcessError: If the 'git diff' command fails.
     """
-    diff_output = subprocess.check_output(
-        ["git", "diff", "--cached", filename]
-    ).decode("utf-8")
-
-    if not diff_output:
-        print("No changes in the staged files.")
+    try:
+        diff_output = subprocess.check_output(
+            ["git", "diff", "--cached", filename],
+            stderr=subprocess.STDOUT
+        ).decode("utf-8")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to get diff for file: {filename}, Error: {str(e)}")
         return None
 
-    changed_files = []
-    start = -1
-    for idx, line in enumerate(diff_output.splitlines()):
-        if line.startswith("diff --git"):
-            if start != -1:
-                changed_files.append((filename, diff_output[start:idx]))
-            start = idx
-            filename = line.split()[-1]
-    if start != -1:
-        changed_files.append((filename, diff_output[start:]))
-
-    prompt = "Write a concise commit message that summarizes the following:\n\n"
-    for filename, diff_content in changed_files:
-        prompt += f"- Changes in file: {filename}\n\n{diff_content}\n"
-    prompt += "\n**Tips:**\n"
+    prompt = f"Write a concise commit message that summarizes the changes in {filename}:\n\n{diff_output}\n"
+    prompt += "**Tips:**\n"
     prompt += "- Use imperative present tense (e.g., 'Fix bug', not 'Fixed bug')\n"
     prompt += "- Aim for a single line, with a maximum of 50 characters\n"
-
     return prompt
 
 
@@ -89,33 +76,34 @@ def automate_git_commit():
     """
     Automates the Git commit process with granular file-by-file tracking.
     """
-    while True:  # Continuously check for changes
+    try:
         modified_files = subprocess.check_output(
             ["git", "status", "--porcelain"]
         ).decode("utf-8").splitlines()
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to get status from Git: {str(e)}")
+        return
 
-        if not modified_files:
-            print("No changes to commit.")
-            time.sleep(30 * 60)  # Wait for 30 minutes if no changes
-            continue
+    for line in modified_files:
+        status = line[0]  # Extract status (first character)
+        filename = line[3:]
+        # if filename:  # Modified, Added, or Deleted files
+        #     print(f"Processing {filename}...")
+        subprocess.call(["git", "add", filename])
 
-        for line in modified_files:
-            print(line[3:])
-            status = line[0]  # Extract status (first character)
-            filename = line[3:]
-
-            subprocess.call(["git", "add", filename])
-
-
-            prompt = generate_commit_message(generate_commit_prompt(filename))
-
-            if prompt:
-                print(f"Generated commit message for {filename}: {prompt}")
-                subprocess.call(["git", "commit", "-m", prompt])
+        commit_prompt = generate_commit_prompt(filename)
+        if commit_prompt:
+            commit_message = generate_commit_message(commit_prompt)
+            if commit_message:
+                subprocess.call(["git", "commit", "-m", commit_message])
                 subprocess.call(["git", "push"])
                 print(f"Changes in {filename} committed and pushed to remote.")
             else:
-                print(f"Commit generation failed for {filename}.")
+                print(f"Failed to generate commit message for {filename}.")
+        else:
+            print(f"No diff or prompt available for {filename}, skipping commit.")
 
 if __name__ == "__main__":
-    automate_git_commit()  # Start the automation process
+    while True:
+        automate_git_commit()
+        # time.sleep(3 * 6)  # Wait for 30 minutes before checking again
