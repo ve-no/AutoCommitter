@@ -7,7 +7,6 @@ import os
 API_KEY = os.environ.get('API_KEY')
 MODEL_NAME = "gemini-pro"
 
-
 def generate_commit_message(prompt):
     """
     Generates a commit message based on the given prompt.
@@ -105,8 +104,6 @@ def automate_git_commit():
         status = line[0]
         filename = line[3:]
         handle_file_change(filename, status)
-
-
 
 if __name__ == "__main__":
     while True:
