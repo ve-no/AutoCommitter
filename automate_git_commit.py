@@ -88,8 +88,6 @@ def automate_git_commit():
         status = line[0]  # Extract status (first character)
         filename = line[3:]
         # if filename:  # Modified, Added, or Deleted files
-
-
         if os.path.exists(filename):  # File still exists
             if status != "D":  # Modified or Added
                 subprocess.call(["git", "add", filename])
