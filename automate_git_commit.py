@@ -74,7 +74,8 @@ def generate_commit_prompt(filename):
 
 def handle_file_change(filename, status):
     """Handles actions for a changed file based on its status code."""
-    if status == 'D':
+    # check if file does not exist
+    if not os.path.exists(filename):
         subprocess.call(["git", "rm", filename])
         commit_message = f"Delete file {filename}"
     else:  # 'M' or 'A'
