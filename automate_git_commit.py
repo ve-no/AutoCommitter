@@ -103,10 +103,8 @@ def automate_git_commit():
     for line in modified_files:
         status = line[0]
         filename = line[3:]
-        if os.path.exists(filename):
-            handle_file_change(filename, status)
-        else:
-            print(f"File {filename} has been deleted but not staged. Skipping.")
+        handle_file_change(filename, status)
+
 
 
 if __name__ == "__main__":
