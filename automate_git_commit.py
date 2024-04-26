@@ -87,28 +87,26 @@ def generate_commit_prompt(filename):
 
 def automate_git_commit():
     """
-    Automates the Git commit process:
-        - Finds modified files.
-        - Adds each modified file.
-        - Generates a commit message.
-        - Commit and push the changes.
+    Automates the Git commit process with granular file-by-file tracking.
     """
-    modified_files = subprocess.check_output(
-        ["git", "status", "--porcelain"]
-    ).decode("utf-8").splitlines()
+    while True:  # Continuously check for changes
+        modified_files = subprocess.check_output(
+            ["git", "status", "--porcelain"]
+        ).decode("utf-8").splitlines()
 
+        if not modified_files:
+            print("No changes to commit.")
+            time.sleep(30 * 60)  # Wait for 30 minutes if no changes
+            continue
 
+        for line in modified_files:
+            print(line[3:])
+            status = line[0]  # Extract status (first character)
+            filename = line[3:]
 
-    if not modified_files:
-        print("No modified files to commit.")
-        return
-
-    for line in modified_files:
-        filename = line[3:]  # Extract filename
-        if filename:
             subprocess.call(["git", "add", filename])
 
-            # Generate a commit message for this specific file
+
             prompt = generate_commit_message(generate_commit_prompt(filename))
 
             if prompt:
@@ -120,6 +118,4 @@ def automate_git_commit():
                 print(f"Commit generation failed for {filename}.")
 
 if __name__ == "__main__":
-    while True:
-        automate_git_commit()
-        time.sleep(1 * 6)  # Sleep for 30 minutes
+    automate_git_commit()  # Start the automation process
