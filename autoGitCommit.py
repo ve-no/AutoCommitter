@@ -44,40 +44,40 @@ def generate_commit_message(prompt):
         print(f"Error: {response.status_code}")
         return None
 
-def generate_commit_prompt():
-    """
-    Generates a commit message prompt based on the changes in the staged files.
+# def generate_commit_prompt():
+#     """
+#     Generates a commit message prompt based on the changes in the staged files.
 
-    Returns:
-        str: The commit message prompt.
+#     Returns:
+#         str: The commit message prompt.
 
-    Raises:
-        subprocess.CalledProcessError: If the 'git diff' command fails.
-    """
-    diff_output = subprocess.check_output(["git", "diff", "--cached"]).decode("utf-8")
-    if not diff_output:
-        print("No changes in the staged files.")
-        return None
+#     Raises:
+#         subprocess.CalledProcessError: If the 'git diff' command fails.
+#     """
+#     diff_output = subprocess.check_output(["git", "diff", "--cached"]).decode("utf-8")
+#     if not diff_output:
+#         print("No changes in the staged files.")
+#         return None
 
-    changed_files = []
-    start = -1
-    for idx, line in enumerate(diff_output.splitlines()):
-        if line.startswith("diff --git"):
-            if start != -1:
-                changed_files.append((filename, diff_output[start:idx]))
-            start = idx
-            filename = line.split()[-1]
-    if start != -1:
-        changed_files.append((filename, diff_output[start:]))
+#     changed_files = []
+#     start = -1
+#     for idx, line in enumerate(diff_output.splitlines()):
+#         if line.startswith("diff --git"):
+#             if start != -1:
+#                 changed_files.append((filename, diff_output[start:idx]))
+#             start = idx
+#             filename = line.split()[-1]
+#     if start != -1:
+#         changed_files.append((filename, diff_output[start:]))
 
-    prompt = "Write a concise commit message that summarizes the following:\n\n"
-    for filename, diff_content in changed_files:
-        prompt += f"- Changes in file: {filename}\n\n{diff_content}\n"
-    prompt += "\n**Tips:**\n"
-    prompt += "- Use imperative present tense (e.g., 'Fix bug', not 'Fixed bug')\n"
-    prompt += "- Aim for a single line, with a maximum of 50 characters\n"
+#     prompt = "Write a concise commit message that summarizes the following:\n\n"
+#     for filename, diff_content in changed_files:
+#         prompt += f"- Changes in file: {filename}\n\n{diff_content}\n"
+#     prompt += "\n**Tips:**\n"
+#     prompt += "- Use imperative present tense (e.g., 'Fix bug', not 'Fixed bug')\n"
+#     prompt += "- Aim for a single line, with a maximum of 50 characters\n"
 
-    return prompt
+#     return prompt
 
 
 def generate_commit_prompt(filename):
