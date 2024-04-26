@@ -46,7 +46,7 @@ def generate_commit_message(prompt):
         print(f"Error: {response.status_code}")
         return None
 
-def generate_commit_prompt():
+def generate_commit_prompt(filename):
     """
     Generates a commit message prompt based on the changes in the staged files.
 
@@ -56,9 +56,13 @@ def generate_commit_prompt():
     Raises:
         subprocess.CalledProcessError: If the 'git diff' command fails.
     """
-    diff_output = subprocess.check_output(["git", "diff", "--cached"]).decode("utf-8")
+    diff_output = subprocess.check_output(
+        ["git", "diff", "--cached", filename]
+    ).decode("utf-8")
+
     if not diff_output:
         print("No changes in the staged files.")
+        return None
 
     changed_files = []
     start = -1
@@ -102,8 +106,8 @@ def automate_git_commit():
     for line in modified_files:
         status = line[0]
         filename = line[3:]  # Extract filename
-        print(filename)
-        print(status)
+        # print(filename)
+        # print(status)
         if status in ['M', 'A']:
             subprocess.call(["git", "add", filename])
 
