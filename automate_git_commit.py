@@ -88,23 +88,32 @@ def automate_git_commit():
         status = line[0]  # Extract status (first character)
         filename = line[3:]
         # if filename:  # Modified, Added, or Deleted files
-        #     print(f"Processing {filename}...")
-        if os.path.exists(filename):
-            subprocess.call(["git", "add", filename])
-        else:
-            print(f"File {filename} does not exist. Skipping.")
 
-        commit_prompt = generate_commit_prompt(filename)
-        if commit_prompt:
-            commit_message = generate_commit_message(commit_prompt)
-            if commit_message:
+
+        if os.path.exists(filename):  # File still exists
+            if status != "D":  # Modified or Added
+                subprocess.call(["git", "add", filename])
+                commit_prompt = generate_commit_prompt(filename)
+                if commit_prompt:
+                    commit_message = generate_commit_message(commit_prompt)
+                    if commit_message:
+                        subprocess.call(["git", "commit", "-m", commit_message])
+                        subprocess.call(["git", "push"])
+                        print(f"Changes in {filename} committed and pushed to remote.")
+                    else:
+                        print(f"Failed to generate commit message for {filename}.")
+                else:
+                    print(f"No diff or prompt available for {filename}, skipping commit.")
+
+        else:  # File has been deleted
+            if status == "D":
+                subprocess.call(["git", "rm", filename])  # Stage the deletion
+                commit_message = f"Delete file {filename}"  # Simple default message
                 subprocess.call(["git", "commit", "-m", commit_message])
                 subprocess.call(["git", "push"])
-                print(f"Changes in {filename} committed and pushed to remote.")
+                print(f"Deleted file {filename} committed and pushed to remote.")
             else:
-                print(f"Failed to generate commit message for {filename}.")
-        else:
-            print(f"No diff or prompt available for {filename}, skipping commit.")
+                print(f"File {filename} has been deleted but not staged. Skipping.")
 
 if __name__ == "__main__":
     while True:
