@@ -17,7 +17,7 @@
    ```bash
    git clone https://github.com/ve-no/AutoCommitter.git
    ```
-
+.
 3. **Setup:**
    ```bash
    cd <repo-name>
