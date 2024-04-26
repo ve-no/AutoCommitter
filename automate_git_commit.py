@@ -89,7 +89,10 @@ def automate_git_commit():
         filename = line[3:]
         # if filename:  # Modified, Added, or Deleted files
         #     print(f"Processing {filename}...")
-        subprocess.call(["git", "add", filename])
+        if os.path.exists(filename):
+            subprocess.call(["git", "add", filename])
+        else:
+            print(f"File {filename} does not exist. Skipping.")
 
         commit_prompt = generate_commit_prompt(filename)
         if commit_prompt:
