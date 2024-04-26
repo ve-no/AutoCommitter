@@ -44,4 +44,4 @@ def automate_git_commit():
 if __name__ == "__main__":
     while True:
         automate_git_commit()
-        time.sleep(60)
+        time.sleep(30 * 60)
