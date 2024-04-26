@@ -106,14 +106,11 @@ def automate_git_commit():
                     print(f"No diff or prompt available for {filename}, skipping commit.")
 
         else:  # File has been deleted
-            if status == "D":
-                subprocess.call(["git", "rm", filename])  # Stage the deletion
-                commit_message = f"Delete file {filename}"  # Simple default message
-                subprocess.call(["git", "commit", "-m", commit_message])
-                subprocess.call(["git", "push"])
-                print(f"Deleted file {filename} committed and pushed to remote.")
-            else:
-                print(f"File {filename} has been deleted but not staged. Skipping.")
+            commit_message = f"Delete file {filename}"  # Simple default message
+            subprocess.call(["git", "commit", "-m", commit_message])
+            subprocess.call(["git", "push"])
+            print(f"Deleted file {filename} committed and pushed to remote.")
+
 
 if __name__ == "__main__":
     while True:
