@@ -8,68 +8,68 @@ import autoGitCommit
 API_KEY = os.environ.get('API_KEY')
 MODEL_NAME = "gemini-pro"
 
-def generate_commit_message(prompt):
-    """
-    Generates a commit message based on the given prompt.
+# def generate_commit_message(prompt):
+#     """
+#     Generates a commit message based on the given prompt.
 
-    Args:
-        prompt (str): The prompt to generate the commit message from.
+#     Args:
+#         prompt (str): The prompt to generate the commit message from.
 
-    Returns:
-        str: The generated commit message.
+#     Returns:
+#         str: The generated commit message.
 
-    Raises:
-        None
-    """
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL_NAME}:generateContent?key={API_KEY}"
-    payload = {
-        "contents": [
-            {
-                "parts": [
-                    {"text": prompt}
-                ]
-            }
-        ]
-    }
-    headers = {
-        'Content-Type': 'application/json'
-    }
-    response = requests.post(url, headers=headers, data=json.dumps(payload))
+#     Raises:
+#         None
+#     """
+#     url = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL_NAME}:generateContent?key={API_KEY}"
+#     payload = {
+#         "contents": [
+#             {
+#                 "parts": [
+#                     {"text": prompt}
+#                 ]
+#             }
+#         ]
+#     }
+#     headers = {
+#         'Content-Type': 'application/json'
+#     }
+#     response = requests.post(url, headers=headers, data=json.dumps(payload))
 
-    if response.status_code == 200:
-        data = response.json()
-        return data['candidates'][0]['content']['parts'][0]['text']
-    else:
-        print(f"Error: {response.status_code}")
-        return None
+#     if response.status_code == 200:
+#         data = response.json()
+#         return data['candidates'][0]['content']['parts'][0]['text']
+#     else:
+#         print(f"Error: {response.status_code}")
+#         return None
 
-def generate_commit_prompt(filename):
-    """
-    Generates a commit message prompt based on the changes in the staged files.
+# def generate_commit_prompt(filename):
+#     """
+#     Generates a commit message prompt based on the changes in the staged files.
 
-    Args:
-        filename (str): Name of the file to create the prompt for.
+#     Args:
+#         filename (str): Name of the file to create the prompt for.
 
-    Returns:
-        str: The commit message prompt.
+#     Returns:
+#         str: The commit message prompt.
 
-    Raises:
-        subprocess.CalledProcessError: If the 'git diff' command fails.
-    """
-    try:
-        diff_output = subprocess.check_output(
-            ["git", "diff", "--cached", filename],
-            stderr=subprocess.STDOUT
-        ).decode("utf-8")
-    except subprocess.CalledProcessError as e:
-        print(f"Failed to get diff for file: {filename}, Error: {str(e)}")
-        return None
+#     Raises:
+#         subprocess.CalledProcessError: If the 'git diff' command fails.
+#     """
+#     try:
+#         diff_output = subprocess.check_output(
+#             ["git", "diff", "--cached", filename],
+#             stderr=subprocess.STDOUT
+#         ).decode("utf-8")
+#     except subprocess.CalledProcessError as e:
+#         print(f"Failed to get diff for file: {filename}, Error: {str(e)}")
+#         return None
 
-    prompt = f"Write a concise commit message that summarizes the changes in {filename}:\n\n{diff_output}\n"
-    prompt += "**Tips:**\n"
-    prompt += "- Use imperative present tense (e.g., 'Fix bug', not 'Fixed bug')\n"
-    prompt += "- Aim for a single line, with a maximum of 50 characters\n"
-    return prompt
+#     prompt = f"Write a concise commit message that summarizes the changes in {filename}:\n\n{diff_output}\n"
+#     prompt += "**Tips:**\n"
+#     prompt += "- Use imperative present tense (e.g., 'Fix bug', not 'Fixed bug')\n"
+#     prompt += "- Aim for a single line, with a maximum of 50 characters\n"
+#     return prompt
 
 
 def handle_file_change(filename, status):
@@ -82,7 +82,7 @@ def handle_file_change(filename, status):
         subprocess.call(["git", "add", filename])
         commit_prompt = autoGitCommit.generate_commit_prompt(filename)
         if commit_prompt:
-            commit_message = generate_commit_message(commit_prompt)
+            commit_message =  autoGitCommit.generate_commit_message(commit_prompt)
             if not commit_message:
                 print(f"Failed to generate commit message for {filename}.")
                 return
