@@ -106,4 +106,4 @@ def automate_git_commit():
 if __name__ == "__main__":
     while True:
         automate_git_commit()
-        time.sleep(3 * 6)  # Wait for 30 minutes before checking again
+        time.sleep(60)  # Wait for 30 minutes before checking again
