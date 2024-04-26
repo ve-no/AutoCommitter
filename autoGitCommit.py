@@ -79,39 +79,6 @@ def generate_commit_prompt():
 
     return prompt
 
-
-# def generate_commit_prompt(filename):
-#     """
-#     Generates a commit message prompt based on the changes in the staged files.
-
-#     Args:
-#         filename (str): Name of the file to create the prompt for.
-
-#     Returns:
-#         str: The commit message prompt.
-
-#     Raises:
-#         subprocess.CalledProcessError: If the 'git diff' command fails.
-#     """
-#     try:
-#         diff_output = subprocess.check_output(
-#             ["git", "diff", "--cached", filename],
-#             stderr=subprocess.STDOUT
-#         ).decode("utf-8")
-#     except subprocess.CalledProcessError as e:
-#         print(f"Failed to get diff for file: {filename}, Error: {str(e)}")
-#         return None
-
-#     prompt = f"Write a concise commit message that summarizes the changes in {filename}:\n\n{diff_output}\n"
-#     prompt += "**Tips:**\n"
-#     prompt += "- Use imperative present tense (e.g., 'Fix bug', not 'Fixed bug')\n"
-#     prompt += "- Aim for a single line, with a maximum of 50 characters\n"
-#     return prompt
-
-
-
-
-
 if __name__ == "__main__":
     while True:
         if generate_commit_prompt() is None:
