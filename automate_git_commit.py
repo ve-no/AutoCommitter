@@ -106,6 +106,7 @@ def automate_git_commit():
                     print(f"No diff or prompt available for {filename}, skipping commit.")
 
         else:  # File has been deleted
+            subprocess.call(["git", "rm", filename])
             commit_message = f"Delete file {filename}"  # Simple default message
             subprocess.call(["git", "commit", "-m", commit_message])
             subprocess.call(["git", "push"])
