@@ -104,18 +104,19 @@ def automate_git_commit():
         filename = line[3:]  # Extract filename
         print(filename)
         print(status)
-        # if status in ['M', 'A']:  # Check if modified or added
-        subprocess.call(["git", "add", filename])
+        if status in ['M', 'A']:
+            subprocess.call(["git", "add", filename])
 
-    prompt = generate_commit_message(generate_commit_prompt())
+            # Generate a commit message for this specific file
+            prompt = generate_commit_message(generate_commit_prompt(filename))
 
-    if prompt:
-        print(f"Generated commit message: {prompt}")
-        subprocess.call(["git", "commit", "-m", prompt])
-        subprocess.call(["git", "push"])
-        print("Changes committed and pushed to remote.")
-    else:
-        print("Commit generation failed.")
+            if prompt:
+                print(f"Generated commit message for {filename}: {prompt}")
+                subprocess.call(["git", "commit", "-m", prompt])
+                subprocess.call(["git", "push"])
+                print(f"Changes in {filename} committed and pushed to remote.")
+            else:
+                print(f"Commit generation failed for {filename}.")
 
 if __name__ == "__main__":
     while True:
