@@ -108,7 +108,7 @@ def automate_git_commit():
         filename = line[3:]  # Extract filename
         # print(filename)
         print(status)
-        if status in ['M', 'A', '?']:
+        if filename:
             subprocess.call(["git", "add", filename])
 
             # Generate a commit message for this specific file
@@ -125,4 +125,4 @@ def automate_git_commit():
 if __name__ == "__main__":
     while True:
         automate_git_commit()
-        # time.sleep(1 * 6)  # Sleep for 30 minutes
+        time.sleep(1 * 6)  # Sleep for 30 minutes
