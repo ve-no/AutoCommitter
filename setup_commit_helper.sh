@@ -4,7 +4,7 @@ PYTHON_SCRIPT_NAME="autoGitCommit.py"
 ALIAS_NAME="commit"
 SCRIPT_DOWNLOAD_PATH="$HOME/.local/bin"
 
-NEW_SCRIPT_NAME="automate_git_commit.py"  # Replace with the actual script name
+NEW_SCRIPT_NAME="automate_git_commit.py" 
 NEW_ALIAS_NAME="autocommit"       # Replace with your desired alias
 
 # Create the download directory if it doesn't exist
