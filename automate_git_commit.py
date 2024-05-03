@@ -23,6 +23,7 @@ def handle_file_change(filename, status):
                 return
 
     subprocess.call(["git", "commit", "-m", commit_message])
+    print(f"Generated commit message: \033[92m{commit_message}\033[0m")
     subprocess.call(["git", "push"])
     print(f"Changes in {filename} committed and pushed to remote.")
 
