@@ -86,7 +86,7 @@ if __name__ == "__main__":
         prompt = generate_commit_message(generate_commit_prompt())
 
         if prompt:
-            print(f"Generated commit message: {prompt}")
+            print(f"Generated commit message: \033[92m{prompt}\033[0m")
 
             confirmation = input("Is this commit message okay? (y/n): ")
             if confirmation.lower() in ['y', '']:
